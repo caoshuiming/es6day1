@@ -422,18 +422,18 @@
 // console.log(map.has(json));
 
 // Map 转为数组
-const myMap = new Map()
-  .set(true, 7)
-  .set({foo: 3}, ['abc']);
-const arr = [...myMap]
-console.log(arr)
+// const myMap = new Map()
+//   .set(true, 7)
+//   .set({foo: 3}, ['abc']);
+// const arr = [...myMap]
+// console.log(arr)
 // [ [ true, 7 ], [ { foo: 3 }, [ 'abc' ] ] ]
 
 // 数组 转为 Map
-new Map([
-    [true, 7],
-    [{foo: 3}, ['abc']]
-])
+// new Map([
+//     [true, 7],
+//     [{foo: 3}, ['abc']]
+// ])
 // Map {
 //   true => 7,
 //   Object {foo: 3} => ['abc']
@@ -454,3 +454,171 @@ new Map([
 // // 对象转为 Map
 // let obj = {"a":1, "b":2};
 // let map = new Map(Object.entries(obj));
+
+// proxy 代理 ES5 增强 对象和函数
+// let obj = {
+//   add:function(val){
+//     return val+100;
+//   },
+//   name:'I am csm'
+// }
+// console.log(obj.add(100));
+// console.log(obj.name);
+
+// const employee = {
+//   firstName:'c',
+//   lastName:'sm'
+// };
+// console.group('employee');
+// console.log(employee.firstName);
+// console.log(employee.lastName);
+// console.groupEnd();
+// let handler = {
+//   get:function(target, fieldName) {
+    
+//     if(fieldName === 'fullName'){
+//       return `${target.firstName} ${target.lastName}`
+//     }
+
+//     return fieldName in target ?
+//       target[fieldName]:
+//       `No such property as, '${fieldName}'!`
+//   }
+// };
+// let p = new Proxy(employee, handler);
+// console.group('proxy');
+// console.log(p.firstName);
+// console.log(p.lastName);
+// console.log(p.org);
+// console.log(p.fullName);
+// console.groupEnd();
+
+// 改变set方法来实现一个验证的例子
+// const validator = {
+//   set:function(obj,prop,value) {
+//     if(prop === 'age'){
+//       if(!Number.isInteger(value)){
+//         throw new TypeError('Age is always an Integer.');
+//       }
+//       if(value < 0){
+//         throw new TypeError('This is insane, a negitive age?');
+//       }
+//     }
+//   }
+// };
+// let pr = new Proxy(employee, validator);
+// //尝试设置一个不合法的属性，比如：
+// pr.age = -2;
+
+// var pro = new Proxy({
+//   add:function(val) {
+//     return val+100
+//   },
+//   name:'I am csm',
+// },{
+//   get:function(target,key,property) {
+//     console.log('come in get');
+//     return target[key];
+//   },
+//   set:function(target,key,value,reciver){
+//     console.log(`setting ${key} = ${value}`);
+//     return target[key] = value + '222';
+//   }
+// });
+// console.log(pro.name);
+// pro.name = '曹水明';
+// console.log(pro.name);
+// console.log(pro.add(6));
+
+// apply的使用 拦截
+// let target = function(val){
+//   console.log('I am csm')
+//   return val+=100
+// }
+// let handler = {
+//   apply(target,ctx,args){
+//     console.log('do apply');
+//     return Reflect.apply(...arguments);
+//   }
+// }
+// let pro = new Proxy(target,handler);
+// console.log(pro(5));
+
+// promise
+// promise es5 回调地狱
+// let state = 1;
+// function step1(resolve,reject){
+//   console.log('1.开始-洗菜做饭');
+//   if(state==1){
+//     resolve('洗菜做饭')
+//   }else{
+//     reject('洗菜做饭-错误')
+//   }
+// }
+// function step2(resolve,reject){
+//   console.log('2.开始-坐下来吃饭');
+//   if(state==2){
+//     resolve('坐下来吃饭')
+//   }else{
+//     reject('坐下来吃饭-错误')
+//   }
+// }
+// function step3(resolve,reject){
+//   console.log('3.开始-收拾桌子');
+//   if(state==3){
+//     resolve('收拾桌子')
+//   }else{
+//     reject('收拾桌子-错误')
+//   }
+// }
+
+// new Promise(step1).then(function(val){
+//   console.log(val);
+//   return new Promise(step2);
+// }).then(function(val){
+//   console.log(val);
+//   return new Promise(step3);
+// }).then(function(val){
+//   console.log(val);
+// });
+
+// 类
+// 类的方法
+class Coder{
+
+  // 类的传参
+  constructor(a,b){
+    this.a = a,
+    this.b = b;
+  }
+
+  add(){
+    return this.a + this.b;
+  }
+
+  name(val){
+    console.log(val);
+    return val;
+  }
+
+  skill(val){
+    console.log(this.name('曹水明') + ':' + 'skill-' + val);
+  }
+  
+}
+// let csm = new Coder;
+// // csm.name('曹水明');
+// csm.skill('web');
+// csm = new Coder(1,2);
+// console.log(csm.add());
+
+// 类的继承
+// class htmler extends Coder{
+
+// }
+// let csmDev = new htmler;
+// csmDev.name('闪电狼fw');
+
+// 模块化
+// import 引入 export 输出
+import {a} from  './temp.js';
